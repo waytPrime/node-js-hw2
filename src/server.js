@@ -18,5 +18,7 @@ export const setupServer = () => {
     })
   );
 
+  app.use("*", (_, res) => res.status(404).json({ massage: "not found" }));
+
   app.listen(port, () => console.log(`server running on port ${port}`));
 };
