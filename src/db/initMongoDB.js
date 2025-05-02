@@ -8,7 +8,7 @@ export const initMongoDB = async () => {
     const dbStr = getEnvVar("MONGODB_DB");
     const dbPassword = getEnvVar("MONGODB_PASSWORD");
 
-    await mongoose.connect(`${dbUser} ${dbPassword} ${dbUrl} ${dbStr}`);
+    await mongoose.connect(`${dbUser}${dbPassword}${dbUrl}${dbStr}`);
     console.log("Mongo connect sucefully");
   } catch (e) {
     console.log(e);
