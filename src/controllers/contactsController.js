@@ -7,8 +7,8 @@ import {
   upsertContact,
 } from "../services/contatsServices.js";
 
-export const getAllContactsController = (req, res) => {
-  const contacts = getAllContacts();
+export const getAllContactsController = async (req, res) => {
+  const contacts = await getAllContacts();
   console.log(contacts);
 
   res.status(200).json({
