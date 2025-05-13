@@ -4,3 +4,4 @@ export const notFoundHandler = (_req, res) => {
     message: "Sorry, route not found",
   });
 };
+
