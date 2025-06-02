@@ -10,20 +10,40 @@ import {
   patchContactController,
   upsertContactController,
 } from "../controllers/contactsController.js";
+import { validateBody } from "../middlewares/validateBody.js";
+import {
+  createContactsSchema,
+  inseartContactsSchema,
+} from "../validation/contactsValidation.js";
+import { isValidId } from "../middlewares/isValidId.js";
 
 const router = Router();
 
 router.get("/", ctrlWrapper(getAllContactsController));
 
-router.get("/:id", ctrlWrapper(getContactByIdController));
+router.get("/:id", isValidId, ctrlWrapper(getContactByIdController));
 
-router.post("/", ctrlWrapper(createContactController));
+router.post(
+  "/",
+  validateBody(createContactsSchema),
+  ctrlWrapper(createContactController)
+);
 
-router.patch("/:id", ctrlWrapper(patchContactController));
+router.patch(
+  "/:id",
+  isValidId,
+  validateBody(inseartContactsSchema),
+  ctrlWrapper(patchContactController)
+);
 
-router.put("/:id", ctrlWrapper(upsertContactController));
+router.put(
+  "/:id",
+  isValidId,
+  validateBody(createContactsSchema),
+  ctrlWrapper(upsertContactController)
+);
 
-router.delete("/:id", ctrlWrapper(deleteContactController));
+router.delete("/:id", isValidId, ctrlWrapper(deleteContactController));
 
 router.get("/test/error", ctrlWrapper(errorController));
 

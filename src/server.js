@@ -6,6 +6,7 @@ import contactsRouter from "./routers/contactsRouter.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { notFoundHandler } from "./middlewares/notFoundHandler.js";
 
+
 export const setupServer = () => {
   const port = getEnvVar("PORT", 3000);
 

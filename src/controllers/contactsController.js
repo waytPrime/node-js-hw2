@@ -1,20 +1,36 @@
 import createHttpError from "http-errors";
+import { SORT_LIST } from "../constants/index.js";
 import {
   createContact,
   deleteContact,
   getAllContacts,
   getContactById,
   upsertContact,
-} from "../services/contatsServices.js";
+} from "../services/contactsServices.js";
+import { parsePaginationParams } from "../utils/parsePaginationParams.js";
+import { parseSortParams } from "../utils/parseSortParams.js";
+import { listSortDb } from "../db/models/contactsModel.js";
+import { parseFilterParams } from "../utils/filter/parseFilterParams.js";
 
 export const getAllContactsController = async (req, res) => {
-  const contacts = await getAllContacts();
-  console.log(contacts);
+  const { page = 1, perPage = 3 } = parsePaginationParams(req.query);
+  const { sortBy = listSortDb[0], sortOrder = SORT_LIST[0] } = parseSortParams(
+    req.query
+  );
+  const filter = parseFilterParams(req.query);
+
+  const contacts = await getAllContacts({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+    filter,
+  });
 
   res.status(200).json({
     status: 200,
     message: "Get all contact",
-    data: contacts,
+    ...contacts,
   });
 };
 
@@ -44,7 +60,7 @@ export const createContactController = async (req, res) => {
   });
 };
 
-export const patchContactController = async (req, res) => {
+export const patchContactController = async (req, res, next) => {
   const { id } = req.params;
 
   const result = await upsertContact(id, req.body, {
@@ -52,7 +68,7 @@ export const patchContactController = async (req, res) => {
   });
 
   if (!result) {
-    throw createHttpError(404, "Sorry contact not found");
+    return next(createHttpError(404, "Sorry contact not found"));
   }
 
   res.status(200).json({
