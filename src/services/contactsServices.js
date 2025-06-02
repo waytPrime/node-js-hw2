@@ -1,4 +1,3 @@
-import { CONTACT_TYPE } from "../constants/index.js";
 import ContactsModel from "../db/models/contactsModel.js";
 import { calculatePaginationData } from "../utils/calculatePaginationData.js";
 
