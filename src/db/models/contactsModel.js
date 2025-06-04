@@ -1,5 +1,5 @@
-import { Schema, model } from "mongoose";
-import { CONTACT_TYPE_LIST } from "../../constants/index.js";
+import { Schema, model } from 'mongoose';
+import { CONTACT_TYPE_LIST } from '../../constants/index.js';
 
 const contactsSchema = new Schema(
   {
@@ -20,12 +20,12 @@ const contactsSchema = new Schema(
       type: String,
       enum: CONTACT_TYPE_LIST,
       required: true,
-      default: "personal",
+      default: 'personal',
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-const ContactsModel = model("contacts", contactsSchema);
+const ContactsModel = model('contacts', contactsSchema);
 
 export default ContactsModel;

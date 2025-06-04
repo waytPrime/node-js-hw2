@@ -1,9 +1,27 @@
-import ContactsModel from "../db/models/contactsModel.js";
+import ContactsModel from '../db/models/contactsModel.js';
 
-export const getAllContacts = () => ContactsModel.find();
+export const getAllContacts = async ({ page = 1, perPage = 3 }) => {
+  const skip = (page - 1) * perPage;
 
-export const getContactById = (contactId) =>
-  ContactsModel.findById(contactId);
+  const contacts = await ContactsModel.find().skip(skip).limit(perPage);
+  const totalItems = await ContactsModel.find().countDocuments();
+
+  const totalPage = Math.ceil(totalItems / perPage);
+  const hasNextPage = page < totalPage;
+  const hasPreviousPage = page !== 1;
+
+  return {
+    contacts,
+    page,
+    perPage,
+    totalItems,
+    totalPage,
+    hasNextPage,
+    hasPreviousPage,
+  };
+};
+
+export const getContactById = (contactId) => ContactsModel.findById(contactId);
 
 export const createContact = (payload) => ContactsModel.create(payload);
 
@@ -12,7 +30,7 @@ export const upsertContact = async (contactId, payload, options = {}) => {
     { _id: contactId },
     payload,
 
-    { new: true, includeResultMetadata: true, ...options }
+    { new: true, includeResultMetadata: true, ...options },
   );
   console.log(rawResult);
   console.log(rawResult?.lastErrorObject?.upserted);

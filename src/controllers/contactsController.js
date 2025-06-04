@@ -1,19 +1,23 @@
-import createHttpError from "http-errors";
+import createHttpError from 'http-errors';
 import {
   createContact,
   deleteContact,
   getAllContacts,
   getContactById,
   upsertContact,
-} from "../services/contatsServices.js";
+} from '../services/contatsServices.js';
+import { parsePaginationParams } from '../utils/pagination/paginationParams.js';
 
 export const getAllContactsController = async (req, res) => {
-  const contacts = await getAllContacts();
-  console.log(contacts);
+  const { page, perPage } = parsePaginationParams(req.query);
+
+  console.log(page, perPage);
+
+  const contacts = await getAllContacts({ page, perPage });
 
   res.status(200).json({
     status: 200,
-    message: "Get all contact",
+    message: 'Get all contact',
     data: contacts,
   });
 };
@@ -25,7 +29,7 @@ export const getContactByIdController = async (req, res) => {
   if (!contact) {
     throw createHttpError(
       404,
-      `Sorry, contact with id (${id}) not found создал ошибку`
+      `Sorry, contact with id (${id}) not found создал ошибку`,
     );
   }
   res.status(200).json({
@@ -39,7 +43,7 @@ export const createContactController = async (req, res) => {
   const newContact = await createContact(req.body);
   res.status(201).json({
     status: 201,
-    message: "Contact was created",
+    message: 'Contact was created',
     data: newContact,
   });
 };
@@ -52,7 +56,7 @@ export const patchContactController = async (req, res) => {
   });
 
   if (!result) {
-    throw createHttpError(404, "Sorry contact not found");
+    throw createHttpError(404, 'Sorry contact not found');
   }
 
   res.status(200).json({
@@ -68,14 +72,14 @@ export const upsertContactController = async (req, res) => {
   const result = await upsertContact(id, req.body, { upsert: true });
 
   if (!result) {
-    throw createHttpError(404, "Contact not found");
+    throw createHttpError(404, 'Contact not found');
   }
 
   const status = result?.isNew ? 201 : 200;
 
   res.status(status).json({
     status: status,
-    message: "Contact wasSuccessfully upserted a contact",
+    message: 'Contact wasSuccessfully upserted a contact',
     data: result?.contact,
   });
 };
@@ -93,5 +97,5 @@ export const deleteContactController = async (req, res) => {
 };
 
 export const errorController = async (req, res) => {
-  throw createHttpError(505, "Test error");
+  throw createHttpError(505, 'Test error');
 };
