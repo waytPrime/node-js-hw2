@@ -26,6 +26,10 @@ const contactsSchema = new Schema(
   { timestamps: true },
 );
 
+contactsSchema.pre('save', function (a, b, c) {
+  console.log(this, "'safssfff", a, b, c);
+});
+
 const ContactsModel = model('contacts', contactsSchema);
 
 export const SORT_BY_LIST = [

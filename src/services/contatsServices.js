@@ -5,8 +5,15 @@ export const getAllContacts = async ({
   perPage = 3,
   sortBy,
   sortOrder,
+  filter = {},
 }) => {
   const skip = (page - 1) * perPage;
+
+  const queryParams = ContactsModel.find();
+
+  if (filter.isFavorite) {
+    queryParams.where();
+  }
 
   const contacts = await ContactsModel.find()
     .skip(skip)
