@@ -26,8 +26,9 @@ const contactsSchema = new Schema(
   { timestamps: true },
 );
 
-contactsSchema.pre('save', function (a, b, c) {
-  console.log(this, "'safssfff", a, b, c);
+contactsSchema.pre('save', function (next) {
+  console.log(this);
+  next();
 });
 
 const ContactsModel = model('contacts', contactsSchema);
