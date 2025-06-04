@@ -7,7 +7,7 @@ export const parseSortParams = ({ sortBy, sortOrder }) => {
   const parseSortOrder = parseString(sortOrder, SORT_ORDER_LIST);
 
   return {
-    sotrBy: parseSortBy,
+    sortBy: parseSortBy,
     sortOrder: parseSortOrder,
   };
 };
