@@ -26,7 +26,7 @@ const contactsSchema = new Schema(
   { timestamps: true },
 );
 
-contactsSchema.pre('save', function (next) {
+contactsSchema.pre('findOneAndUpdate', function (next) {
   console.log(this);
   next();
 });
