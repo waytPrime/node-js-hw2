@@ -5,7 +5,8 @@ import { parseString } from '../parseString.js';
 export const parseSortParams = ({ sortBy, sortOrder }) => {
   const parseSortBy = parseString(sortBy, SORT_BY_LIST);
   const parseSortOrder = parseString(sortOrder, SORT_ORDER_LIST);
-
+  console.log();
+  
   return {
     sortBy: parseSortBy,
     sortOrder: parseSortOrder,

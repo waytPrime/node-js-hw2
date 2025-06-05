@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { CONTACT_TYPE_LIST } from '../../constants/index.js';
+import { handleSaveError, updateSettings } from './hooks/hookDb.js';
 
 const contactsSchema = new Schema(
   {
@@ -26,10 +27,10 @@ const contactsSchema = new Schema(
   { timestamps: true },
 );
 
-contactsSchema.pre('findOneAndUpdate', function (next) {
-  console.log(this);
-  next();
-});
+contactsSchema.pre('findOneAndUpdate', updateSettings);
+
+contactsSchema.post('save', handleSaveError);
+contactsSchema.post('findOneAndUpdate', handleSaveError);
 
 const ContactsModel = model('contacts', contactsSchema);
 
