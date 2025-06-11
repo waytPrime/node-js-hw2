@@ -7,32 +7,30 @@ export const getAllContacts = async ({
   sortOrder,
   filter = {},
 }) => {
-  // console.log(page, perPage, sortBy, sortOrder, filter);
-
   const skip = (page - 1) * perPage;
 
   const queryParams = ContactsModel.find();
 
-  if (filter.isFavorite) {
+  if (filter.isFavorite)
     queryParams.where('isFavorite').equals(filter.isFilter);
-  }
-  if (filter.contactType) {
+  if (filter.contactType)
     queryParams.where('contactType').equals(filter.contactType);
-  }
 
   const contactsPromise = queryParams
     .skip(skip)
     .limit(perPage)
     .sort({ [sortBy]: sortOrder })
     .exec();
-  const totalItemsPromise = ContactsModel.find()
-    .clone(contactsPromise)
-    .countDocuments();
+
+  const totalItemsPromise = ContactsModel.find(
+    queryParams.getFilter(),
+  ).countDocuments();
 
   const [contacts, totalItems] = await Promise.all([
     contactsPromise,
     totalItemsPromise,
   ]);
+  console.log(contacts.length);
 
   const totalPage = Math.ceil(totalItems / perPage);
   const hasNextPage = page < totalPage;
